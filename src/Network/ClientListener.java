@@ -1,7 +1,11 @@
+package Network;
+
+import Network.MessageManager;
+
 public class ClientListener implements Runnable
 {
 
-    private  MessageManager mm;
+    private MessageManager mm;
 
     public ClientListener(MessageManager mm)
     {
@@ -18,6 +22,7 @@ public class ClientListener implements Runnable
                 message = mm.recvMessage();
                 if (message != null)
                 {
+
                     System.out.println("Message Received: " + message);
                 }
             }
