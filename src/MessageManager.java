@@ -34,8 +34,8 @@ public class MessageManager
             bw.write(msg);
             bw.flush();
 
-            bw.close();
-            osw.close();
+      //      bw.close();
+      //      osw.close();
 
         }
         catch (IOException e)
@@ -49,15 +49,10 @@ public class MessageManager
     {
         try {
             String msg = "";
-            String buffer;
+            char[] pole = new char[256];
             BufferedReader br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 
-            while ((buffer = br.readLine()) != null) {
-                msg += buffer;
-               // if (msg.contains(";")) {
-              //      return msg;
-              //  }
-            }
+            msg = br.readLine();
 
 
             return msg;

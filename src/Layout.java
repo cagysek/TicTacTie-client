@@ -18,6 +18,7 @@ public class Layout extends Application {
 
     private Stage stage;
     private TextField nickName;
+    private static MessageManager mm;
 
 
     public static void main(String[] args) {
@@ -28,8 +29,9 @@ public class Layout extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        MessageManager mm = new MessageManager();
-        mm.sendMessage("NAME;cagy;");
+        mm = new MessageManager();
+
+
 
         ClientListener clientListener = new ClientListener(mm);
         Thread listener = new Thread(clientListener);
@@ -70,6 +72,7 @@ public class Layout extends Application {
 
         Button logButt = new Button("Log in");
         logButt.setPrefSize(80,30);
+        logButt.setOnAction(event -> loginToServer());
 
         controls.getChildren().addAll(header, nickName, logButt);
         controls.setSpacing(15);
@@ -77,6 +80,12 @@ public class Layout extends Application {
         controls.setPadding(new Insets(10));
 
         return controls;
+    }
+
+
+    private void loginToServer()
+    {
+        mm.sendMessage("NAME;" + nickName.getText() + ";");
     }
 }
 

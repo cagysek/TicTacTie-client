@@ -11,15 +11,18 @@ public class ClientListener implements Runnable
     @Override
     public void run() {
         String message = null;
-        while (true) {
-            try {
+        while (true)
+        {
+            try
+            {
                 message = mm.recvMessage();
-                if (message != null) {
+                if (message != null)
+                {
                     System.out.println("Message Received: " + message);
-                } else {
-                    System.out.println("Empty Message");
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace();
                 //
             }
