@@ -1,17 +1,22 @@
+// Dear programmer:
+// When I wrote this code, only god and I
+// knew how it worked.
+// Now only god knows it!
+
+// Therefore, if you are trying to optimize
+// this routine and it falls (most surely),
+// please increase this counter as a warning
+// for next person:
+
+// total_waste_hours_here = XXX
+
 import Logic.Controller;
 import Network.ClientListener;
 import Network.MessageManager;
 import javafx.application.Application;
-import javafx.scene.*;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-
-
-
 public class App extends Application {
-
-    private Stage stage;
 
     public static void main(String[] args) {
 
@@ -22,9 +27,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        this.stage = primaryStage;
-
-        Controller controller = new Controller(this.stage);
+        Controller controller = new Controller(primaryStage);
 
         MessageManager messageManager = new MessageManager(controller);
 
@@ -34,7 +37,8 @@ public class App extends Application {
 
         controller.setMessageManager(messageManager);
         controller.setDefaultWindow();
-        this.stage.show();
+
+        primaryStage.show();
     }
 }
 

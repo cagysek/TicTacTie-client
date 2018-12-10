@@ -1,4 +1,5 @@
 package Scene;
+import Object.Player;
 
 import Network.MessageManager;
 import Enum.EMessagePrefix;
@@ -44,8 +45,7 @@ public class Login extends SceneTemplate {
 
     private void loginToServer(String nickName)
     {
-        setNickName(nickName);
-        super.messageManager.loginToServer(nickName);
+        this.messageManager.loginToServer(nickName);
     }
 
 

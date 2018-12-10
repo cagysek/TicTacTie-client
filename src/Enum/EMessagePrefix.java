@@ -5,7 +5,9 @@ public enum EMessagePrefix {
     LOGIN("NAME;"),
     FIND_GAME("FIND_GAME;"),
     TURN("TURN;"),
-    REPLAY("REPLAY")
+    REMATCH("REMATCH;"),
+    CLOSE_GAME("CLOSE_GAME;"),
+    EXIT("EXIT;")
     ;
 
 
@@ -20,7 +22,6 @@ public enum EMessagePrefix {
     public String toString() {
         return text;
     }
-
 
 
 }

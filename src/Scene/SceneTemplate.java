@@ -39,7 +39,7 @@ public abstract class SceneTemplate {
 
     public String getNickName()
     {
-        return nickName;
+        return this.nickName;
     }
 
     abstract Node getControls();

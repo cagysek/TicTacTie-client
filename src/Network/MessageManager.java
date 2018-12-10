@@ -1,8 +1,9 @@
 package Network;
 
 import Logic.Controller;
-import Enum.EMessagePrefix;
+import Enum.*;
 import javafx.stage.Stage;
+import Object.*;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -90,20 +91,70 @@ public class MessageManager
     public void findGame()
     {
         sendMessage(EMessagePrefix.FIND_GAME.toString());
-        controller.actionStartGame();
     }
 
     public void loginToServer(String nickname)
     {
+        this.controller.setPlayer(nickname);
         sendMessage(EMessagePrefix.LOGIN + nickname + ";");
-        controller.actionSuccLogin();
-
     }
 
     public void sentMoveToServer(int row, int column)
     {
         sendMessage(EMessagePrefix.TURN.toString() + row + EMessagePrefix.DELIMETER + column + EMessagePrefix.DELIMETER);
     }
+
+    public void closeGame()
+    {
+        sendMessage(EMessagePrefix.CLOSE_GAME.toString());
+    }
+
+    public void exit()
+    {
+        sendMessage(EMessagePrefix.EXIT.toString());
+    }
+
+
+    public void replay()
+    {
+        sendMessage(EMessagePrefix.REMATCH.toString());
+    }
+
+    public void resolveMessage(String msg)
+    {
+        String parts[] = msg.split(";");
+
+        EState state = EState.valueOf(parts[0].toUpperCase());
+        ResponseData data;
+
+        if (state.equals(EState.OPPONENT_TURN) || state.equals(EState.YOUR_TURN))
+        {
+            int row = Integer.valueOf(parts[1]);
+            int column = Integer.valueOf(parts[2]);
+
+            data = new ResponseData(state, new Coordinates(row, column));
+        }
+        else if (state.equals(EState.WIN) ||  state.equals(EState.TIE) ||  state.equals(EState.LOSE))
+        {
+            int yourScore = Integer.valueOf(parts[1]);
+            int opponentScore = Integer.valueOf(parts[2]);
+
+            data = new ResponseData(state, new Score(yourScore, opponentScore));
+        }
+        else
+        {
+            int result = 0;
+            if (parts.length > 1) {
+                result = Integer.valueOf(parts[1]);
+            }
+            data = new ResponseData(state, result);
+        }
+
+
+        controller.setState(data);
+
+    }
+
 
 
 }

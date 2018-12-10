@@ -22,9 +22,9 @@ public class Lobby extends SceneTemplate{
     public Node getControls()
     {
         VBox controls = new VBox();
-        Text header = new Text("Vítej " + getNickName());
+        Text header = new Text("Vítej " + super.getNickName());
         header.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-
+        System.out.println(getNickName());
 
         Button findGameButt = new Button("Hrát hru");
         findGameButt.setPrefSize(80,30);
@@ -51,6 +51,6 @@ public class Lobby extends SceneTemplate{
 
     private void exitGame()
     {
-        System.exit(0);
+        this.messageManager.exit();
     }
 }

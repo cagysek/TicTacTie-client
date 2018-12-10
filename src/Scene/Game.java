@@ -1,6 +1,7 @@
 package Scene;
 
 import Network.MessageManager;
+import Enum.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -32,7 +33,7 @@ public class Game extends SceneTemplate {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                Cell cell = new Cell();
+                Cell cell = new Cell(this.messageManager, j, i);
                 cell.setTranslateX(j * 100);
                 cell.setTranslateY(i * 100);
 
@@ -45,11 +46,39 @@ public class Game extends SceneTemplate {
         return controls;
     }
 
+    public void drawX(int row, int column)
+    {
+        Cell cell = this.board[row][column];
+        cell.drawX();
+    }
+
+    public void drawO(int row, int column)
+    {
+        Cell cell = this.board[row][column];
+        cell.drawO();
+    }
+
+    public void reset()
+    {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                board[j][i].clearCell();
+            }
+        }
+    }
+
 
     private class Cell extends StackPane {
         private Text text = new Text();
+        private MessageManager messageManager;
+        private int row;
+        private int column;
 
-        public Cell() {
+        public Cell(MessageManager messageManager, int row, int column) {
+            this.messageManager = messageManager;
+            this.row = row;
+            this.column = column;
+
             Rectangle border = new Rectangle(100, 100);
             border.setFill(null);
             border.setStroke(Color.BLACK);
@@ -59,34 +88,28 @@ public class Game extends SceneTemplate {
             setAlignment(Pos.CENTER);
             getChildren().addAll(border, text);
 
-            setOnMouseClicked(event -> {
-             /*   if (!playable)
-                    return;
+            setOnMouseClicked(event ->
+            {
+                //if (!playable)
+                 //   return;
 
-                if (event.getButton() == MouseButton.PRIMARY) {
-                    if (!turnX)
-                        return;
-
-                    drawX();
-                    turnX = false;
-                    checkState();
-                } else if (event.getButton() == MouseButton.SECONDARY) {
-                    if (turnX)
-                        return;
-
-                    drawO();
-                    turnX = true;
-                    checkState();
-                }
-                */
-
-                if (event.getButton() == MouseButton.PRIMARY) {
-
-                    drawX();
-
+                if (event.getButton() == MouseButton.PRIMARY)
+                {
+                    this.messageManager.sentMoveToServer(this.row, this.column);
+                    //drawX();
                 }
 
             });
+        }
+
+        public double getRow()
+        {
+            return this.row;
+        }
+
+        public double getColumn()
+        {
+            return this.column;
         }
 
         public double getCenterX() {
@@ -107,6 +130,11 @@ public class Game extends SceneTemplate {
 
         public void drawO() {
             text.setText("O");
+        }
+
+        public void clearCell()
+        {
+            text.setText("");
         }
     }
 }
