@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Text;
 
 public abstract class SceneTemplate {
 
@@ -12,6 +13,8 @@ public abstract class SceneTemplate {
     private int width;
     private int heigth;
     protected String nickName;
+
+    protected Text statusText;
 
     public SceneTemplate(MessageManager messageManager, int width, int heigth)
     {
@@ -40,6 +43,11 @@ public abstract class SceneTemplate {
     public String getNickName()
     {
         return this.nickName;
+    }
+
+    public void setStatusText(String text)
+    {
+        this.statusText.setText(text);
     }
 
     abstract Node getControls();

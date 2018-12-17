@@ -1,5 +1,6 @@
 package Logic;
 
+import Network.ClientListener;
 import Network.MessageManager;
 import Enum.*;
 import Object.*;
@@ -21,11 +22,20 @@ public class Controller {
 
     private String nickName;
 
+    private Thread listener;
+
     public Controller(Stage stage)
     {
 
         this.stage = stage;
 
+    }
+
+    public void startUpListener()
+    {
+        ClientListener clientListener = new ClientListener(messageManager);
+        listener = new Thread(clientListener);
+        listener.start();
     }
 
     public void setPlayer(String player)
@@ -45,7 +55,7 @@ public class Controller {
     }
 
 
-    public void actionSuccLogin()
+    private void actionSuccLogin()
     {
         this.currentScene = new Lobby(this.messageManager, 380,200);
         this.currentScene.setNickName(this.nickName);
@@ -54,25 +64,25 @@ public class Controller {
         System.out.println("Player successful logged");
     }
 
-    public void actionStartGame()
+    private void actionStartGame()
     {
-        this.currentScene = new Game(this.messageManager, 300, 300);
+        this.currentScene = new Game(this.messageManager, 300, 300, null);
         render(this.currentScene.getScene());
         System.out.println("Starting game");
 
     }
 
-    public void actionYourMove(int row, int column)
+    private void actionYourMove(int row, int column)
     {
         ((Game)this.currentScene).drawX(row, column);
     }
 
-    public void actionOpponentMove(int row, int column)
+    private void actionOpponentMove(int row, int column)
     {
         ((Game)this.currentScene).drawO(row, column);
     }
 
-    public void actionShowResult(String result, Score score)
+    private void actionShowResult(String result, Score score)
     {
         this.currentScene = new Result(this.messageManager, 300,300, result, score);
 
@@ -83,6 +93,7 @@ public class Controller {
     private void actionCloseGame()
     {
         this.currentScene = new Lobby(this.messageManager, 380,200);
+        this.currentScene.setNickName(this.nickName);
         render(this.currentScene.getScene());
     }
 
@@ -94,9 +105,26 @@ public class Controller {
         alert.showAndWait();
     }
 
+    private void actionWaiting()
+    {
+        System.out.println("Looking for game");
+        ((Lobby)this.currentScene).lookingFor();
+    }
+
     private void actionExit()
     {
+        listener.interrupt();
+
+
         System.exit(0);
+    }
+
+    private void actionReconnectGame(Reconnect reconnect)
+    {
+        this.currentScene = new Game(this.messageManager, 300, 300, reconnect);
+        render(this.currentScene.getScene());
+        ((Game) this.currentScene).reconnect();
+        System.out.println("Reconnecting game");
     }
 
     public void render(Scene window)
@@ -104,37 +132,23 @@ public class Controller {
         this.stage.setScene(window);
     }
 
-    public void update()
+    public void actionSetStatus(String msg)
     {
-
+        this.currentScene.setStatusText(msg);
     }
-
-
-
 
     public void setState(ResponseData data)
     {
         switch (data.getState())
         {
             case LOGIN:
-                if (data.getResult() == 0)
-                {
-                    actionSuccLogin();
-                }
-                else
-                {
-                    System.out.println("Error while logging");
-                }
+                actionSuccLogin();
                 break;
             case LOBBY:
-               // switch ()
-                if (data.getResult() == 0)
-                {
 
-                }
                 break;
             case WAITING:
-                System.out.println("Seeking for opponent");
+                actionWaiting();
                 break;
             case STARTING_GAME:
                 actionStartGame();
@@ -168,8 +182,14 @@ public class Controller {
             case EXIT:
                 actionExit();
                 break;
+            case RECONNECT:
+                actionReconnectGame(data.getReconnect());
+                break;
+            case STATUS:
+                actionSetStatus(data.getMsg());
+                break;
             default:
-                System.out.println("UNKNOWN STATE");
+                System.out.println("UNKNOWN STATE: " +data.getState());
 
         }
     }

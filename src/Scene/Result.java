@@ -42,7 +42,7 @@ public class Result extends SceneTemplate {
 
         result.setAlignment(Pos.CENTER);
 
-        
+
         result.getChildren().addAll(yourScore, delimiter, opponentScore);
 
         Button replayButt = new Button("Replay");

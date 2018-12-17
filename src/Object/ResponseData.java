@@ -5,12 +5,14 @@ import Enum.*;
 public class ResponseData {
 
 
-    EState state;
-    int result;
+    private EState state;
+    private int result;
+    private String msg;
 
     private Coordinates coordinates;
     private Score score;
 
+    private Reconnect reconnect;
 
     public ResponseData(EState state, int result)
     {
@@ -32,6 +34,19 @@ public class ResponseData {
         this.score = score;
     }
 
+    public ResponseData(EState state, Reconnect reconnect)
+    {
+        this.state = state;
+        this.reconnect = reconnect;
+    }
+
+    public ResponseData(EState state, String msg)
+    {
+
+        this.state = state;
+        this.msg = msg;
+    }
+
     public EState getState() {
         return state;
     }
@@ -46,5 +61,13 @@ public class ResponseData {
 
     public Score getScore() {
         return score;
+    }
+
+    public Reconnect getReconnect() {
+        return reconnect;
+    }
+
+    public String getMsg() {
+        return msg;
     }
 }

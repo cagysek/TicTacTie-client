@@ -72,7 +72,7 @@ public class MessageManager
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+         //   e.printStackTrace();
             return "error baby";
         }
     }
@@ -140,6 +140,14 @@ public class MessageManager
             int opponentScore = Integer.valueOf(parts[2]);
 
             data = new ResponseData(state, new Score(yourScore, opponentScore));
+        }
+        else if (state.equals(EState.RECONNECT))
+        {
+            data = new ResponseData(state, new Reconnect(parts[1], Integer.parseInt(parts[2])));
+        }
+        else if (state.equals(EState.STATUS))
+        {
+            data = new ResponseData(state, parts[1]);
         }
         else
         {

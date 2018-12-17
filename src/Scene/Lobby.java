@@ -4,6 +4,7 @@ import Network.MessageManager;
 import Enum.EMessagePrefix;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -12,6 +13,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class Lobby extends SceneTemplate{
+
+    private Button findGameButt;
 
     public Lobby(MessageManager messageManager, int width, int heigth)
     {
@@ -26,12 +29,12 @@ public class Lobby extends SceneTemplate{
         header.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         System.out.println(getNickName());
 
-        Button findGameButt = new Button("Hrát hru");
-        findGameButt.setPrefSize(80,30);
+        findGameButt = new Button("Hrát hru");
+        findGameButt.setPrefSize(130,30);
         findGameButt.setOnAction(event -> findGame());
 
         Button exitGameButt = new Button("Konec");
-        exitGameButt.setPrefSize(80,30);
+        exitGameButt.setPrefSize(130,30);
         exitGameButt.setOnAction(event -> exitGame());
 
 
@@ -42,6 +45,13 @@ public class Lobby extends SceneTemplate{
 
         return controls;
 
+    }
+
+    public void lookingFor()
+    {
+        findGameButt.setText("Looking for game");
+        findGameButt.setDisable(true);
+        findGameButt.setCursor(Cursor.WAIT);
     }
 
     private void findGame()

@@ -5,6 +5,7 @@ public enum EState {
     LOBBY,
     WAITING,
     STARTING_GAME,
+    RECONNECT,
     YOUR_TURN,
     OPPONENT_TURN,
     WIN,
@@ -13,6 +14,7 @@ public enum EState {
     CLOSE_GAME,
     NAME_IS_NOT_AVALIABLE,
     EXIT,
+    STATUS,
     UNKNOW,
     OK,
     ERROR

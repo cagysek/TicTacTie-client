@@ -31,11 +31,9 @@ public class App extends Application {
 
         MessageManager messageManager = new MessageManager(controller);
 
-        ClientListener clientListener = new ClientListener(messageManager);
-        Thread listener = new Thread(clientListener);
-        listener.start();
 
         controller.setMessageManager(messageManager);
+        controller.startUpListener();
         controller.setDefaultWindow();
 
         primaryStage.show();
