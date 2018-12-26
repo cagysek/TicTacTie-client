@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public abstract class SceneTemplate {
@@ -47,8 +48,17 @@ public abstract class SceneTemplate {
 
     public void setStatusText(String text)
     {
+        this.statusText.setFill(Color.BLACK);
         this.statusText.setText(text);
     }
+
+    public void setErrorStatusText(String text)
+    {
+        this.statusText.setFill(Color.RED);
+        this.statusText.setText(text);
+    }
+
+
 
     abstract Node getControls();
 

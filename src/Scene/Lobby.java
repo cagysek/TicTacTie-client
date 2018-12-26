@@ -3,14 +3,18 @@ package Scene;
 import Network.MessageManager;
 import Enum.EMessagePrefix;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class Lobby extends SceneTemplate{
 
@@ -24,16 +28,19 @@ public class Lobby extends SceneTemplate{
     @Override
     public Node getControls()
     {
+        SplitPane root = new SplitPane();
+
+        root.setOrientation(Orientation.VERTICAL);
+
         VBox controls = new VBox();
         Text header = new Text("Vítej " + super.getNickName());
         header.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        System.out.println(getNickName());
 
-        findGameButt = new Button("Hrát hru");
+        findGameButt = new Button("Play game");
         findGameButt.setPrefSize(130,30);
         findGameButt.setOnAction(event -> findGame());
 
-        Button exitGameButt = new Button("Konec");
+        Button exitGameButt = new Button("Exit");
         exitGameButt.setPrefSize(130,30);
         exitGameButt.setOnAction(event -> exitGame());
 
@@ -43,7 +50,20 @@ public class Lobby extends SceneTemplate{
         controls.setAlignment(Pos.CENTER);
         controls.setPadding(new Insets(10));
 
-        return controls;
+        HBox status = new HBox();
+        Text statusHeadline = new Text("Status: ");
+        statusHeadline.setTextAlignment(TextAlignment.LEFT);
+
+        this.statusText = new Text("Ready");
+        this.statusText.setTextAlignment(TextAlignment.LEFT);
+
+        status.getChildren().addAll(statusHeadline,this.statusText);
+        status.setMaxHeight(10);
+
+        root.getItems().addAll(controls, status);
+        SplitPane.setResizableWithParent(status, false);
+
+        return root;
 
     }
 

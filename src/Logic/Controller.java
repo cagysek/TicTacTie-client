@@ -6,8 +6,6 @@ import Enum.*;
 import Object.*;
 import Scene.*;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 public class Controller {
@@ -64,6 +62,13 @@ public class Controller {
         System.out.println("Player successful logged");
     }
 
+    private void actionMoveToLobby()
+    {
+        this.currentScene = new Lobby(this.messageManager, 380,200);
+        this.currentScene.setNickName(this.nickName);
+        render(this.currentScene.getScene());
+    }
+
     private void actionStartGame()
     {
         this.currentScene = new Game(this.messageManager, 300, 300, null);
@@ -97,18 +102,29 @@ public class Controller {
         render(this.currentScene.getScene());
     }
 
-    private void actionShowAlertMsg(String msg_header, String msg_body)
+    private void actionShowError(String msg)
     {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(msg_header);
-        alert.getDialogPane().setContentText(msg_body);
-        alert.showAndWait();
+        this.currentScene.setErrorStatusText(msg);
     }
+
 
     private void actionWaiting()
     {
         System.out.println("Looking for game");
-        ((Lobby)this.currentScene).lookingFor();
+        System.out.println(this.currentScene.getClass().getName());
+
+        if (this.currentScene.getClass().getName().equals("Scene.Lobby"))
+        {
+            ((Lobby)this.currentScene).lookingFor();
+
+        }
+        else if (this.currentScene.getClass().getName().equals("Scene.Result"))
+        {
+            ((Result)this.currentScene).lookingFor();
+        }
+
+        this.currentScene.setStatusText("Waiting for opponent");
+
     }
 
     private void actionExit()
@@ -145,7 +161,7 @@ public class Controller {
                 actionSuccLogin();
                 break;
             case LOBBY:
-
+                actionMoveToLobby();
                 break;
             case WAITING:
                 actionWaiting();
@@ -158,7 +174,6 @@ public class Controller {
                 {
                     actionYourMove(data.getCoordinates().getRow(), data.getCoordinates().getColumn());
                 }
-
                 break;
             case OPPONENT_TURN:
                 actionOpponentMove(data.getCoordinates().getRow(), data.getCoordinates().getColumn());
@@ -177,7 +192,7 @@ public class Controller {
                 actionCloseGame();
                 break;
             case NAME_IS_NOT_AVALIABLE:
-                actionShowAlertMsg("Log in error!","Name is used at the moment. Please choose different.");
+                actionShowError("Name is used at the moment. Please choose different.");
                 break;
             case EXIT:
                 actionExit();
@@ -187,6 +202,12 @@ public class Controller {
                 break;
             case STATUS:
                 actionSetStatus(data.getMsg());
+                break;
+            case INVALID_NAME:
+                actionShowError("Name can not be empty or contains \";\" !");
+                break;
+            case MAXIMUM_GAMES_REACHED:
+                actionShowError("Maximum limit of games is reached. Try again later");
                 break;
             default:
                 System.out.println("UNKNOWN STATE: " +data.getState());

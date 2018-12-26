@@ -3,20 +3,26 @@ package Scene;
 import Network.MessageManager;
 import Object.*;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class Result extends SceneTemplate {
 
     private String headerText;
 
     private Score score;
+
+    private Button replayButt;
 
     public Result(MessageManager messageManager, int width, int heigth, String headerText, Score score)
     {
@@ -27,6 +33,10 @@ public class Result extends SceneTemplate {
 
     @Override
     Node getControls() {
+        SplitPane root = new SplitPane();
+
+        root.setOrientation(Orientation.VERTICAL);
+
         VBox controls = new VBox();
         Text header = new Text(headerText);
         header.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -45,9 +55,9 @@ public class Result extends SceneTemplate {
 
         result.getChildren().addAll(yourScore, delimiter, opponentScore);
 
-        Button replayButt = new Button("Replay");
-        replayButt.setPrefSize(80,30);
-        replayButt.setOnAction(event -> replay());
+        this.replayButt = new Button("Replay");
+        this.replayButt.setPrefSize(80,30);
+        this.replayButt.setOnAction(event -> replay());
 
         Button exitButt = new Button("Exit");
         exitButt.setPrefSize(80,30);
@@ -58,7 +68,27 @@ public class Result extends SceneTemplate {
         controls.setAlignment(Pos.CENTER);
         controls.setPadding(new Insets(10));
 
-        return controls;
+        HBox status = new HBox();
+        Text statusHeadline = new Text("Status: ");
+        statusHeadline.setTextAlignment(TextAlignment.LEFT);
+
+        this.statusText = new Text("Ready");
+        this.statusText.setTextAlignment(TextAlignment.LEFT);
+
+        status.getChildren().addAll(statusHeadline,this.statusText);
+        status.setMaxHeight(10);
+
+        root.getItems().addAll(controls, status);
+        SplitPane.setResizableWithParent(status, false);
+
+        return root;
+    }
+
+    public void lookingFor()
+    {
+        this.replayButt.setText("Waiting for opponent");
+        this.replayButt.setDisable(true);
+        this.replayButt.setCursor(Cursor.WAIT);
     }
 
     private void replay()

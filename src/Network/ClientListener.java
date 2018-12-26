@@ -1,7 +1,8 @@
 package Network;
 
-import Network.MessageManager;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class ClientListener implements Runnable
 {
@@ -29,8 +30,15 @@ public class ClientListener implements Runnable
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace();
-                    //
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setHeaderText("Connection lost");
+                        alert.setContentText("Connection lost");
+                        alert.showAndWait();
+
+                        System.exit(0);
+                    });
+                    break;
                 }
             }
     }

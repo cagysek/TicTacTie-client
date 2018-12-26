@@ -13,10 +13,9 @@ public enum EState {
     TIE,
     CLOSE_GAME,
     NAME_IS_NOT_AVALIABLE,
+    INVALID_NAME,
     EXIT,
     STATUS,
-    UNKNOW,
-    OK,
-    ERROR
+    MAXIMUM_GAMES_REACHED,
     ;
 }

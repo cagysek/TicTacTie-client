@@ -2,6 +2,7 @@ package Network;
 
 import Logic.Controller;
 import Enum.*;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import Object.*;
 
@@ -20,13 +21,16 @@ public class MessageManager
 
     private String lastMessage = "";
 
-    public MessageManager(Controller controller)
+    public MessageManager(Controller controller, Configuration config)
     {
         this.controller = controller;
 
         try
                 {
-                    socket = new Socket("127.0.0.1", 10000);
+                    socket = new Socket(config.getIp(), config.getPort());
+
+
+                    //socket = new Socket("10.10.80.19", 10000);
                     InetAddress adresa = socket.getInetAddress();
                     System.out.print("Pripojuju se na : "+adresa.getHostAddress()+" se jmenem : "+adresa.getHostName()+"\n" );
 
@@ -37,7 +41,12 @@ public class MessageManager
                 }
                 catch (IOException e)
                 {
-                    e.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText("Server Error");
+                    alert.setContentText("Can not connect to server. Try it again later.");
+                    alert.showAndWait();
+
+                    System.exit(0);
                 }
 
     }
@@ -62,29 +71,36 @@ public class MessageManager
         try {
             String msg = br.readLine().trim();
 
-            if (!msg.isEmpty()) {
+            if (!msg.isEmpty())
+            {
                 this.lastMessage = msg;
 
                 return this.lastMessage;
             }
+            else
+            {
+                lostConnection();
 
-            return null;
+                return null;
+            }
+
         }
         catch (Exception e)
         {
-         //   e.printStackTrace();
-            return "error baby";
+            lostConnection();
+
+            return null;
         }
     }
 
-    public Socket getSocket()
+    private void lostConnection()
     {
-        return this.socket;
-    }
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Connection lost");
+        alert.setContentText("Connection lost");
+        alert.showAndWait();
 
-    public String getLastMessage()
-    {
-        return this.lastMessage;
+        System.exit(0);
     }
 
 
