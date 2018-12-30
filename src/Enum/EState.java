@@ -17,5 +17,6 @@ public enum EState {
     EXIT,
     STATUS,
     MAXIMUM_GAMES_REACHED,
+    PING,
     ;
 }

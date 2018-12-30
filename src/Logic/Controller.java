@@ -135,6 +135,11 @@ public class Controller {
         System.exit(0);
     }
 
+    private void actionACK()
+    {
+        messageManager.sendMessage("ACK;");
+    }
+
     private void actionReconnectGame(Reconnect reconnect)
     {
         this.currentScene = new Game(this.messageManager, 300, 300, reconnect);
@@ -208,6 +213,9 @@ public class Controller {
                 break;
             case MAXIMUM_GAMES_REACHED:
                 actionShowError("Maximum limit of games is reached. Try again later");
+                break;
+            case PING:
+                actionACK();
                 break;
             default:
                 System.out.println("UNKNOWN STATE: " +data.getState());

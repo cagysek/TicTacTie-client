@@ -8,7 +8,9 @@ import Object.*;
 
 import java.io.*;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 public class MessageManager
 {
@@ -21,14 +23,29 @@ public class MessageManager
 
     private String lastMessage = "";
 
+    private Configuration config;
+
     public MessageManager(Controller controller, Configuration config)
     {
         this.controller = controller;
+        this.config = config;
 
         try
                 {
-                    socket = new Socket(config.getIp(), config.getPort());
+                    socket = new Socket();
 
+                    try {
+                        InetSocketAddress isa = new InetSocketAddress(this.config.getIp(), this.config.getPort());
+                        socket.connect(isa, 2000);
+                    }
+                    catch (Exception e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setHeaderText("Server Error");
+                        alert.setContentText("Can not connect to server. Try it again later.");
+                        alert.showAndWait();
+
+                        System.exit(0);
+                    }
 
                     //socket = new Socket("10.10.80.19", 10000);
                     InetAddress adresa = socket.getInetAddress();
@@ -55,8 +72,16 @@ public class MessageManager
     {
         try
         {
-            bw.write(msg);
-            bw.flush();
+            if (checkConnection())
+            {
+                bw.write(msg);
+                bw.flush();
+            }
+            else
+            {
+                lostConnection();
+            }
+
 
         }
         catch (IOException e)
@@ -165,6 +190,10 @@ public class MessageManager
         {
             data = new ResponseData(state, parts[1]);
         }
+        else if (state.equals(EState.PING))
+        {
+            data = new ResponseData(state, 0);
+        }
         else
         {
             int result = 0;
@@ -177,6 +206,28 @@ public class MessageManager
 
         controller.setState(data);
 
+    }
+
+
+    private boolean checkConnection()
+    {
+        // Creates a socket address from a hostname and a port number
+        InetSocketAddress socketAddress = new InetSocketAddress(this.config.getIp(), this.config.getPort());
+        Socket socket = new Socket();
+
+        // Timeout required - it's in milliseconds
+        int timeout = 2000;
+
+        try
+        {
+            socket.connect(socketAddress, timeout);
+            socket.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            return false;
+        }
     }
 
 
