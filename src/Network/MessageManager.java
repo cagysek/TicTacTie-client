@@ -72,7 +72,7 @@ public class MessageManager
     {
         try
         {
-            if (checkConnection())
+            if (checkConnection() || msg.equals("ACK;"))
             {
                 bw.write(msg);
                 bw.flush();
