@@ -61,6 +61,8 @@ public class App extends Application
         controller.startUpListener();
         controller.setDefaultWindow();
 
+
+        primaryStage.setOnHiding(event -> {System.exit(0);});
         primaryStage.show();
     }
 }
