@@ -165,7 +165,21 @@ public class MessageManager
     {
         String parts[] = msg.split(";");
 
-        EState state = EState.valueOf(parts[0].toUpperCase());
+        if (parts.length == 0)
+        {
+            return;
+        }
+
+        EState state;
+
+        try {
+            state = EState.valueOf(parts[0].toUpperCase());
+        }catch (Exception e)
+        {
+            System.out.println("Invalid input type message: "+ parts[0].toUpperCase());
+            return;
+        }
+
         ResponseData data;
 
         if (state.equals(EState.OPPONENT_TURN) || state.equals(EState.YOUR_TURN))
