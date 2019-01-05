@@ -67,39 +67,45 @@ public class MessageManager
 
     public void sendMessage(String msg)
     {
-        try
-        {
-            bw.write(msg);
-            bw.flush();
-          /*  if (checkConnection() || msg.equals("ACK;"))
-            {
+        if (testConnection() || msg.equals("ACK;")) {
+            try {
                 bw.write(msg);
                 bw.flush();
-            }
-            else
-            {
-                lostConnection();
-            }
-*/
 
+            } catch (Exception e) {
+                System.out.println("Kokot");
+
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setHeaderText("Lost Connection");
+                alert.setContentText("Connection with server is lost. Trying to reconnect.");
+                alert.showAndWait();
+
+                controller.actionSetStatus("Reconnecting...");
+            }
         }
-        catch (Exception e)
+        else
         {
-            System.out.println("Kokot");
-
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText("Lost Connection");
             alert.setContentText("Connection with server is lost. Trying to reconnect.");
             alert.showAndWait();
-
-            //e.printStackTrace();
         }
 
     }
 
-    private void testConnection()
+    private boolean testConnection()
     {
-        //try
+        try
+        {
+            bw.write("PING;|");
+            bw.flush();
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
     public String recvMessage()
@@ -148,12 +154,12 @@ public class MessageManager
     public void loginToServer(String nickname)
     {
         this.controller.setPlayer(nickname);
-        sendMessage(EMessagePrefix.LOGIN + nickname + ";");
+        sendMessage(EMessagePrefix.LOGIN + nickname + ";|");
     }
 
     public void sentMoveToServer(int row, int column)
     {
-        sendMessage(EMessagePrefix.TURN.toString() + row + EMessagePrefix.DELIMETER + column + EMessagePrefix.DELIMETER);
+        sendMessage(EMessagePrefix.TURN.toString() + row + EMessagePrefix.DELIMETER + column + EMessagePrefix.DELIMETER + "|");
     }
 
     public void closeGame()

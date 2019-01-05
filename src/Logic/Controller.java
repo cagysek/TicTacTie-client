@@ -1,6 +1,7 @@
 package Logic;
 
 import Network.ClientListener;
+import Network.Connectivity;
 import Network.MessageManager;
 import Enum.*;
 import Object.*;
@@ -22,6 +23,10 @@ public class Controller {
 
     private Thread listener;
 
+    private Thread connectivityThread;
+
+    private Connectivity connectivity;
+
     public Controller(Stage stage)
     {
 
@@ -34,6 +39,11 @@ public class Controller {
         ClientListener clientListener = new ClientListener(messageManager);
         listener = new Thread(clientListener);
         listener.start();
+
+        connectivity = new Connectivity();
+        connectivityThread = new Thread(connectivity);
+
+
     }
 
     public void setPlayer(String player)
@@ -58,6 +68,8 @@ public class Controller {
         this.currentScene = new Lobby(this.messageManager, 380,200);
         this.currentScene.setNickName(this.nickName);
         render(this.currentScene.getScene());
+
+        connectivityThread.start();
 
         System.out.println("Player successful logged");
     }
@@ -138,6 +150,9 @@ public class Controller {
     private void actionACK()
     {
         messageManager.sendMessage("ACK;");
+
+        this.connectivity.recievedPing();
+        this.connectivity.setCheck(true);
     }
 
     private void actionReconnectGame(Reconnect reconnect)
