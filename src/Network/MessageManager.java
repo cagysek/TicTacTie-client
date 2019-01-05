@@ -30,49 +30,48 @@ public class MessageManager
         this.controller = controller;
         this.config = config;
 
+        createConnection(2000);
+
+    }
+
+    public void createConnection(int timeout)
+    {
         try
-                {
-                    socket = new Socket();
+        {
+            socket = new Socket();
 
-                    try {
-                        InetSocketAddress isa = new InetSocketAddress(this.config.getIp(), this.config.getPort());
-                        socket.connect(isa, 2000);
-                    }
-                    catch (Exception e) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setHeaderText("Server Error");
-                        alert.setContentText("Can not connect to server. Try it again later.");
-                        alert.showAndWait();
 
-                        System.exit(0);
-                    }
+            InetSocketAddress isa = new InetSocketAddress(this.config.getIp(), this.config.getPort());
+            socket.connect(isa, timeout);
 
-                    //socket = new Socket("10.10.80.19", 10000);
-                    InetAddress adresa = socket.getInetAddress();
-                    System.out.print("Pripojuju se na : "+adresa.getHostAddress()+" se jmenem : "+adresa.getHostName()+"\n" );
 
-                    OutputStreamWriter osw = new OutputStreamWriter(this.socket.getOutputStream());
-                    bw = new BufferedWriter(osw);
+            //socket = new Socket("10.10.80.19", 10000);
+            InetAddress adresa = socket.getInetAddress();
+            System.out.print("Pripojuju se na : "+adresa.getHostAddress()+" se jmenem : "+adresa.getHostName()+"\n" );
 
-                    br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-                }
-                catch (IOException e)
-                {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setHeaderText("Server Error");
-                    alert.setContentText("Can not connect to server. Try it again later.");
-                    alert.showAndWait();
+            OutputStreamWriter osw = new OutputStreamWriter(this.socket.getOutputStream());
+            bw = new BufferedWriter(osw);
 
-                    System.exit(0);
-                }
+            br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        }
+        catch (IOException e)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Server Error");
+            alert.setContentText("Can not connect to server. Try it again later.");
+            alert.showAndWait();
 
+            System.exit(0);
+        }
     }
 
     public void sendMessage(String msg)
     {
         try
         {
-            if (checkConnection() || msg.equals("ACK;"))
+            bw.write(msg);
+            bw.flush();
+          /*  if (checkConnection() || msg.equals("ACK;"))
             {
                 bw.write(msg);
                 bw.flush();
@@ -81,14 +80,26 @@ public class MessageManager
             {
                 lostConnection();
             }
-
+*/
 
         }
-        catch (IOException e)
+        catch (Exception e)
         {
-            e.printStackTrace();
+            System.out.println("Kokot");
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Lost Connection");
+            alert.setContentText("Connection with server is lost. Trying to reconnect.");
+            alert.showAndWait();
+
+            //e.printStackTrace();
         }
 
+    }
+
+    private void testConnection()
+    {
+        //try
     }
 
     public String recvMessage()
@@ -104,7 +115,7 @@ public class MessageManager
             }
             else
             {
-                lostConnection();
+               // lostConnection();
 
                 return null;
             }
@@ -112,7 +123,7 @@ public class MessageManager
         }
         catch (Exception e)
         {
-            lostConnection();
+            //lostConnection();
 
             return null;
         }

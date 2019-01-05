@@ -209,7 +209,7 @@ public class Controller {
                 actionSetStatus(data.getMsg());
                 break;
             case INVALID_NAME:
-                actionShowError("Name can not be empty or contains \";\" !");
+                actionShowError("Name can not be empty or contains \";\" and max lenght is 13!");
                 break;
             case MAXIMUM_GAMES_REACHED:
                 actionShowError("Maximum limit of games is reached. Try again later");
