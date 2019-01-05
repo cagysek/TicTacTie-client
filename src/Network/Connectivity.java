@@ -53,7 +53,7 @@ public class Connectivity implements Runnable {
                     {
                         i++;
                         System.out.println(i);
-                        if (i == TIMEOUT)
+                        if (i >= TIMEOUT)
                         {
                             Platform.runLater(() -> {
                                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -63,7 +63,6 @@ public class Connectivity implements Runnable {
 
                                 System.exit(0);
                             });
-                            break;
                         }
 
 

@@ -112,6 +112,7 @@ public class MessageManager
     {
         try {
             String msg = br.readLine().trim();
+            System.out.println(msg);
 
             if (!msg.isEmpty())
             {
