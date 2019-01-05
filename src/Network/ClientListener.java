@@ -38,7 +38,6 @@ public class ClientListener implements Runnable
 
                         System.exit(0);
                     });
-                    break;
                 }
             }
     }
