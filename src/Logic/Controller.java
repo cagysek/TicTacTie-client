@@ -149,7 +149,7 @@ public class Controller {
 
     private void actionACK()
     {
-        messageManager.sendMessage("ACK;");
+        messageManager.sendMessage("ACK;|");
 
         this.connectivity.recievedPing();
         this.connectivity.setCheck(true);

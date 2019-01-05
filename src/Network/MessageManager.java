@@ -67,7 +67,7 @@ public class MessageManager
 
     public void sendMessage(String msg)
     {
-        if (testConnection() || msg.equals("ACK;")) {
+        if (msg.equals("ACK;|") || testConnection()) {
             try {
                 bw.write(msg);
                 bw.flush();
