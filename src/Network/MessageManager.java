@@ -130,6 +130,7 @@ public class MessageManager
         }
         catch (Exception e)
         {
+            System.out.println(e.getMessage());
             //lostConnection();
 
             return null;
