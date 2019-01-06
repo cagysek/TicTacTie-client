@@ -49,6 +49,7 @@ public class Connectivity implements Runnable {
                 int i = 0;
 
                 this.messageManager.getController().actionSetStatus("Reconnecting...");
+                this.messageManager.setAllowCommunication(false);
 
                 while(!this.check)
                 {

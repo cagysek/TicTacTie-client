@@ -25,6 +25,8 @@ public class MessageManager
 
     private Configuration config;
 
+    private boolean allowCommunication = true;
+
     public MessageManager(Controller controller, Configuration config)
     {
         this.controller = controller;
@@ -67,20 +69,22 @@ public class MessageManager
 
     public void sendMessage(String msg)
     {
+        if (this.allowCommunication) {
 
-        if (msg.equals("ACK;|") || testConnection()) {
-            try {
-                bw.write(msg);
-                bw.flush();
+            if (msg.equals("ACK;|") || testConnection()) {
+                try {
+                    bw.write(msg);
+                    bw.flush();
 
-            } catch (IOException e) {
-                System.out.println("Kokot");
+                } catch (IOException e) {
+                    System.out.println("Kokot");
 
+                    printLostConnection();
+                }
+            } else {
+                System.out.println("Kokoto");
                 printLostConnection();
             }
-        } else {
-            System.out.println("Kokoto");
-            printLostConnection();
         }
 
 
@@ -88,6 +92,8 @@ public class MessageManager
 
     private void printLostConnection()
     {
+        this.allowCommunication = false;
+
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText("Lost Connection");
         alert.setContentText("Connection with server is lost. Trying to reconnect.");
@@ -107,6 +113,7 @@ public class MessageManager
         }
         catch (IOException e)
         {
+            this.allowCommunication = false;
             return false;
         }
     }
@@ -115,6 +122,7 @@ public class MessageManager
     {
         try {
             String msg = br.readLine().trim();
+            System.out.println(msg);
 
             if (!msg.isEmpty() && msg.length() < 50)
             {
@@ -267,6 +275,11 @@ public class MessageManager
     public Controller getController()
     {
         return this.controller;
+    }
+
+    public void setAllowCommunication(boolean allowCommunication)
+    {
+        this.allowCommunication = allowCommunication;
     }
 
 
