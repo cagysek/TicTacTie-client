@@ -11,6 +11,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.ArrayList;
 
 public class MessageManager
 {
@@ -132,8 +133,8 @@ public class MessageManager
             }
             else
             {
+                System.out.println(msg);
                // lostConnection();
-
                 return null;
             }
 
@@ -187,6 +188,36 @@ public class MessageManager
     public void replay()
     {
         sendMessage(EMessagePrefix.REMATCH.toString());
+    }
+
+    public void resolving(String msg)
+    {
+        System.out.println(msg);
+        String parts[] = msg.split("%");
+        ArrayList<String> usedParts = new ArrayList<>();
+        boolean used;
+
+        for (int i = 0 ; i < parts.length ; i++)
+        {
+            used = false;
+
+            for (int j = 0 ; j < usedParts.size() ; j++ )
+            {
+                if (usedParts.get(j).compareToIgnoreCase(parts[i]) == 0)
+                {
+                    used = true;
+                }
+            }
+
+            if (!used)
+            {
+                usedParts.add(parts[i]);
+                resolveMessage(parts[i]);
+            }
+
+        }
+
+
     }
 
     public void resolveMessage(String msg)

@@ -25,7 +25,9 @@ public class ClientListener implements Runnable
                     if (message != null)
                     {
                         System.out.println("Message Received: " + message);
-                        Platform.runLater(() -> mm.resolveMessage(message));
+                        Platform.runLater(() ->
+                                mm.resolveMessage(message)
+                        );
                     }
                 }
                 catch (Exception e)
