@@ -78,12 +78,9 @@ public class MessageManager
                     bw.flush();
 
                 } catch (IOException e) {
-                    System.out.println("Kokot");
-
                     printLostConnection();
                 }
             } else {
-                System.out.println("Kokoto");
                 printLostConnection();
             }
         }
@@ -123,9 +120,8 @@ public class MessageManager
     {
         try {
             String msg = br.readLine().trim();
-            System.out.println(msg);
 
-            if (!msg.isEmpty() && msg.length() < 50)
+            if (!msg.isEmpty())
             {
                 this.lastMessage = msg;
 
@@ -133,7 +129,6 @@ public class MessageManager
             }
             else
             {
-                System.out.println(msg);
                // lostConnection();
                 return null;
             }
@@ -220,13 +215,13 @@ public class MessageManager
 
     }
 
-    public void resolveMessage(String msg)
+    public int resolveMessage(String msg)
     {
         String parts[] = msg.split(";");
 
         if (parts.length == 0)
         {
-            return;
+            return -1;
         }
 
         EState state;
@@ -235,9 +230,12 @@ public class MessageManager
             state = EState.valueOf(parts[0].toUpperCase());
         }catch (Exception e)
         {
-            System.out.println("Invalid input type message");
-            return;
+            System.out.println("Invalid message. Error: Unrecognised type of message");
+
+            return -1;
         }
+
+        System.out.println("Message Received: " + msg);
 
         ResponseData data;
 
@@ -278,6 +276,8 @@ public class MessageManager
 
 
         controller.setState(data);
+
+        return 0;
 
     }
 
