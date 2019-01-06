@@ -58,6 +58,11 @@ public abstract class SceneTemplate {
         this.statusText.setText(text);
     }
 
+    public String getStatusText()
+    {
+        return this.statusText.getText();
+    }
+
 
 
     abstract Node getControls();

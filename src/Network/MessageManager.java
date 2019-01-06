@@ -67,32 +67,33 @@ public class MessageManager
 
     public void sendMessage(String msg)
     {
+
         if (msg.equals("ACK;|") || testConnection()) {
             try {
                 bw.write(msg);
                 bw.flush();
 
-            } catch (Exception e) {
+            } catch (IOException e) {
                 System.out.println("Kokot");
 
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setHeaderText("Lost Connection");
-                alert.setContentText("Connection with server is lost. Trying to reconnect.");
-                alert.showAndWait();
-
-                controller.actionSetStatus("Reconnecting...");
+                printLostConnection();
             }
-        }
-        else
-        {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText("Lost Connection");
-            alert.setContentText("Connection with server is lost. Trying to reconnect.");
-            alert.showAndWait();
-
-            controller.actionSetStatus("Reconnecting...");
+        } else {
+            System.out.println("Kokoto");
+            printLostConnection();
         }
 
+
+    }
+
+    private void printLostConnection()
+    {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText("Lost Connection");
+        alert.setContentText("Connection with server is lost. Trying to reconnect.");
+        alert.showAndWait();
+
+        controller.actionSetStatus("Reconnecting...");
     }
 
     private boolean testConnection()
@@ -104,7 +105,7 @@ public class MessageManager
 
             return true;
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             return false;
         }

@@ -27,6 +27,7 @@ public class Controller {
 
     private Connectivity connectivity;
 
+
     public Controller(Stage stage)
     {
 
@@ -153,6 +154,7 @@ public class Controller {
 
         this.connectivity.recievedPing();
         this.connectivity.setCheck(true);
+
     }
 
     private void actionReconnectGame(Reconnect reconnect)
