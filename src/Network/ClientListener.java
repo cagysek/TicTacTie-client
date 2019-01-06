@@ -70,7 +70,7 @@ public class ClientListener implements Runnable
                     });
                 }
                 finally {
-                    if (MAX_INVALID < invalid_message_couter)
+                    if (MAX_INVALID <= invalid_message_couter)
                     {
                         Platform.runLater(() -> {
                             Alert alert = new Alert(AlertType.ERROR);
@@ -80,7 +80,9 @@ public class ClientListener implements Runnable
 
                             System.exit(0);
                         });
+                        break;
                     }
+
                 }
             }
     }
