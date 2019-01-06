@@ -89,6 +89,8 @@ public class MessageManager
             alert.setHeaderText("Lost Connection");
             alert.setContentText("Connection with server is lost. Trying to reconnect.");
             alert.showAndWait();
+
+            controller.actionSetStatus("Reconnecting...");
         }
 
     }
@@ -112,9 +114,8 @@ public class MessageManager
     {
         try {
             String msg = br.readLine().trim();
-            System.out.println(msg);
 
-            if (!msg.isEmpty())
+            if (!msg.isEmpty() && msg.length() < 50)
             {
                 this.lastMessage = msg;
 
@@ -130,7 +131,6 @@ public class MessageManager
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
             //lostConnection();
 
             return null;
@@ -195,7 +195,7 @@ public class MessageManager
             state = EState.valueOf(parts[0].toUpperCase());
         }catch (Exception e)
         {
-            System.out.println("Invalid input type message: "+ parts[0].toUpperCase());
+            System.out.println("Invalid input type message");
             return;
         }
 
@@ -261,6 +261,11 @@ public class MessageManager
         {
             return false;
         }
+    }
+
+    public Controller getController()
+    {
+        return this.controller;
     }
 
 

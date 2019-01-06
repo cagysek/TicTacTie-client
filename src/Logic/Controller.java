@@ -40,7 +40,7 @@ public class Controller {
         listener = new Thread(clientListener);
         listener.start();
 
-        connectivity = new Connectivity();
+        connectivity = new Connectivity(messageManager);
         connectivityThread = new Thread(connectivity);
 
 

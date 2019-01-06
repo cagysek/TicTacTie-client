@@ -10,9 +10,11 @@ public class Connectivity implements Runnable {
     private boolean check;
 
     private static final int TIMEOUT = 60;
+    private MessageManager messageManager;
 
-    public Connectivity()
+    public Connectivity(MessageManager messageManager)
     {
+        this.messageManager = messageManager;
         this.ping = true;
         this.check = true;
     }
@@ -46,13 +48,15 @@ public class Connectivity implements Runnable {
 
                 int i = 0;
 
+                this.messageManager.getController().actionSetStatus("Reconnecting...");
+
                 while(!this.check)
                 {
 
                     try
                     {
                         i++;
-                        System.out.println(i);
+
                         if (i == TIMEOUT)
                         {
                             Platform.runLater(() -> {
