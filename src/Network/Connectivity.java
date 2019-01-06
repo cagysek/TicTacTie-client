@@ -9,7 +9,7 @@ public class Connectivity implements Runnable {
 
     private boolean check;
 
-    private static final int TIMEOUT = 60;
+    private static final int TIMEOUT = 180;
     private MessageManager messageManager;
 
     public Connectivity(MessageManager messageManager)
