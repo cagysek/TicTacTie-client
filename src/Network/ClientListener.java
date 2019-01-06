@@ -73,6 +73,7 @@ public class ClientListener implements Runnable
                     if (MAX_INVALID <= invalid_message_couter)
                     {
                         Platform.runLater(() -> {
+                            System.out.println("Application stopped, because server is sending invalid messages. Try it again later");
                             Alert alert = new Alert(AlertType.ERROR);
                             alert.setHeaderText("Application stopped");
                             alert.setContentText("Application stopped, because server is sending invalid messages. Try it again later");
