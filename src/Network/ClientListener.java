@@ -32,7 +32,7 @@ public class ClientListener implements Runnable
                    final String message = mm.recvMessage();
                     if (message != null)
                     {
-                        if (message.length() > 20)
+                        if (message.length() > 100)
                         {
                             throw new IOException();
                         }
